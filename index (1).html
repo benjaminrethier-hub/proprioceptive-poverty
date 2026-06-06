@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-gumroad-field="name">Proprioceptive Poverty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #DCDCDC;
+    --ink:      #292929;
+    --red:      #8B0000;
+    --red-hot:  #DA0000;
+    --sage:     #8F9779;
+    --off-white:#F2F0EC;
+    --border:   rgba(41,41,41,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE GRAIN ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+    padding: 9px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 94vh;
+    position: relative;
+  }
+
+  /* left column */
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 56px 80px 7vw;
+    position: relative;
+    z-index: 2;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: riseUp 0.6s 0.1s ease forwards;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--sage);
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 7.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin-bottom: 0;
+    opacity: 0;
+    animation: riseUp 0.7s 0.2s ease forwards;
+  }
+
+  .hero-title .accent-line {
+    display: block;
+    color: var(--red);
+  }
+
+  .rule {
+    width: 100%;
+    max-width: 420px;
+    height: 2px;
+    background: var(--red-hot);
+    margin: 28px 0;
+    opacity: 0;
+    animation: expandWidth 0.6s 0.4s ease forwards;
+    transform-origin: left;
+  }
+
+  @keyframes expandWidth {
+    from { opacity: 0; transform: scaleX(0); }
+    to   { opacity: 1; transform: scaleX(1); }
+  }
+
+  .hero-sub {
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--red);
+    line-height: 1.5;
+    max-width: 420px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: riseUp 0.7s 0.45s ease forwards;
+  }
+
+  .hero-body {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #555;
+    max-width: 420px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: riseUp 0.7s 0.55s ease forwards;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: riseUp 0.7s 0.65s ease forwards;
+  }
+
+  .btn-buy {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 16px 36px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-buy::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--red);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 0;
+  }
+
+  .btn-buy:hover::before { transform: translateX(0); }
+  .btn-buy span { position: relative; z-index: 1; }
+  .btn-buy:hover { transform: translateY(-2px); }
+  .btn-buy:active { transform: translateY(0); }
+
+  .price-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+
+  .guarantee-note {
+    margin-top: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sage);
+    opacity: 0;
+    animation: riseUp 0.7s 0.75s ease forwards;
+  }
+
+  /* right column — cover display */
+  .hero-right {
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 30px,
+      rgba(220,220,220,0.03) 30px,
+      rgba(220,220,220,0.03) 31px
+    );
+  }
+
+  .book-mock {
+    width: 280px;
+    background: var(--bg);
+    padding: 48px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    box-shadow: 16px 16px 0 var(--red), 0 32px 80px rgba(0,0,0,0.5);
+    opacity: 0;
+    animation: riseUp 1s 0.6s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .book-mock-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    line-height: 0.95;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+  }
+
+  .book-mock-rule {
+    width: 100%;
+    height: 2px;
+    background: var(--red-hot);
+  }
+
+  .book-mock-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--red);
+    line-height: 1.5;
+  }
+
+  .book-mock-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-top: 8px;
+  }
+
+  /* ── DIVIDER ── */
+  .section-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    margin: 0 6vw;
+  }
+
+  /* ── MECHANISM SECTION ── */
+  .mechanism {
+    padding: 100px 7vw;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .section-tag::after {
+    content: '';
+    display: block;
+    flex: 1;
+    height: 1px;
+    background: var(--sage);
+    max-width: 60px;
+  }
+
+  .mechanism-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .mechanism-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+
+  .mechanism-headline span {
+    color: var(--red);
+  }
+
+  .mechanism-body {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: #444;
+  }
+
+  .mechanism-body + .mechanism-body {
+    margin-top: 20px;
+  }
+
+  .pull-quote {
+    border-left: 3px solid var(--red-hot);
+    padding: 24px 32px;
+    background: var(--off-white);
+    margin-top: 40px;
+  }
+
+  .pull-quote p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .pull-quote cite {
+    display: block;
+    margin-top: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--sage);
+    font-style: normal;
+  }
+
+  /* ── WHAT YOU GET ── */
+  .what-you-get {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 100px 7vw;
+  }
+
+  .what-you-get .section-tag {
+    color: var(--sage);
+  }
+
+  .what-you-get .section-tag::after {
+    background: var(--sage);
+  }
+
+  .wg-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 0.02em;
+    color: var(--bg);
+    margin-bottom: 64px;
+    line-height: 0.95;
+  }
+
+  .wg-title span { color: var(--red-hot); }
+
+  .wg-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(220,220,220,0.1);
+    border: 1px solid rgba(220,220,220,0.1);
+  }
+
+  .wg-card {
+    background: var(--ink);
+    padding: 44px 36px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .wg-card:hover { background: #333; }
+
+  .wg-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: rgba(220,220,220,0.08);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .wg-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--bg);
+    margin-bottom: 12px;
+  }
+
+  .wg-card-body {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(220,220,220,0.6);
+  }
+
+  .wg-card-accent {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--red-hot);
+    transition: width 0.3s ease;
+  }
+
+  .wg-card:hover .wg-card-accent { width: 100%; }
+
+  /* ── AUTHOR ── */
+  .author-section {
+    padding: 100px 7vw;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .author-block {
+    position: relative;
+  }
+
+  .author-initials {
+    width: 180px;
+    height: 180px;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+    box-shadow: 8px 8px 0 var(--sage);
+  }
+
+  .author-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    line-height: 0.95;
+    margin-bottom: 24px;
+  }
+
+  .author-credential {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 24px;
+  }
+
+  .author-body {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: #444;
+  }
+
+  /* ── FINAL CTA ── */
+  .final-cta {
+    background: var(--bg);
+    padding: 100px 7vw;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: 'PP';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40vw;
+    color: rgba(41,41,41,0.04);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .final-cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .final-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 6rem;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .final-price-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 40px;
+  }
+
+  .final-includes {
+    list-style: none;
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .final-includes li {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #555;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .final-includes li::before {
+    content: '—';
+    color: var(--red-hot);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  .btn-buy-lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--red);
+    color: #fff;
+    padding: 20px 56px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-buy-lg:hover { background: var(--red-hot); transform: translateY(-2px); }
+  .btn-buy-lg:active { transform: translateY(0); }
+
+  .final-sub-note {
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(220,220,220,0.4);
+    text-align: center;
+    padding: 28px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+
+  footer a { color: var(--sage); text-decoration: none; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes riseUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-right { height: 360px; }
+    .hero-left { padding: 60px 6vw 48px; }
+    .mechanism-grid { grid-template-columns: 1fr; gap: 40px; }
+    .wg-grid { grid-template-columns: 1fr; }
+    .author-section { grid-template-columns: 1fr; gap: 40px; }
+    .author-initials { width: 120px; height: 120px; font-size: 2.5rem; }
+    .final-price { font-size: 4rem; }
+  }
+
+  @media (max-width: 600px) {
+    .hero-title { font-size: 3.5rem; }
+    .book-mock { width: 220px; padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">FRC Certified · Benjamin Ethier · Proprioceptive Poverty</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">New Release — Available Now</div>
+    <h1 class="hero-title" data-gumroad-field="name">
+      Proprioceptive<span class="accent-line">Poverty</span>
+    </h1>
+    <div class="rule"></div>
+    <p class="hero-sub">How Dead Range Steals Your Psychology — and the Protocol to Restore It</p>
+    <p class="hero-body">
+      Your joints are information-producing organs. When they stop moving through their full range, they stop sending complete signals to your central nervous system. This book names that mechanism — and gives you the protocol to reverse it.
+    </p>
+    <div class="cta-row">
+      <a href="https://benjethier.gumroad.com/l/uuyhrt" class="btn-buy">
+        <span>Get the Book</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <span class="price-tag" data-gumroad-field="price">$9.99</span>
+    </div>
+    <div class="guarantee-note">Instant download · Secure checkout · Free illustrated update when ready</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="book-mock reveal">
+      <div class="book-mock-title">Proprioceptive Poverty</div>
+      <div class="book-mock-rule"></div>
+      <div class="book-mock-sub">How Dead Range Steals Your Psychology — and the Protocol to Restore It</div>
+      <div class="book-mock-author">Benjamin Ethier · FRC-MS</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- MECHANISM -->
+<section class="mechanism">
+  <div class="section-tag">The Mechanism</div>
+  <div class="mechanism-grid">
+    <div>
+      <h2 class="mechanism-headline reveal">
+        Your Body Has Been<br><span>Trying to Tell You</span><br>Something.
+      </h2>
+      <div class="pull-quote reveal">
+        <p>"The way you move is a direct representation of your confidence in your ability to move."</p>
+        <cite>— Benjamin Ethier, FRC-MS</cite>
+      </div>
+    </div>
+    <div>
+      <p class="mechanism-body reveal">
+        You've been told you're fine. The tests came back clean. The trainer gave you a program. The doctor found nothing. And yet something still feels wrong — slow, rigid, heavy, off.
+      </p>
+      <p class="mechanism-body reveal">
+        Proprioceptive Poverty names what that is. Degraded joint signal reaches the CNS as incomplete information, and the CNS responds to incomplete information the same way it responds to threat. The psychological instability you've been living with has a direct mechanical cause.
+      </p>
+      <p class="mechanism-body reveal">
+        This book gives you the mechanism, the protocol, and the vocabulary to interrupt the loop. Built on Functional Range Conditioning principles and over a decade of coaching experience.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- WHAT YOU GET -->
+<section class="what-you-get">
+  <div class="section-tag">What's Inside</div>
+  <h2 class="wg-title reveal">The Full Picture.<br><span>Nothing Softened.</span></h2>
+  <div class="wg-grid">
+    <div class="wg-card reveal">
+      <div class="wg-num">01</div>
+      <div class="wg-card-title">The Diagnosis</div>
+      <p class="wg-card-body">A precise explanation of what proprioceptive poverty is, how it develops, and why it produces both physical restriction and psychological instability. Named. Mechanized. Yours to understand.</p>
+      <div class="wg-card-accent"></div>
+    </div>
+    <div class="wg-card reveal">
+      <div class="wg-num">02</div>
+      <div class="wg-card-title">The Protocol</div>
+      <p class="wg-card-body">Controlled Articular Rotations (CARs), PAILs, and RAILs — the FRC framework explained clearly and applied directly. Not a workout. A systematic restoration of signal.</p>
+      <div class="wg-card-accent"></div>
+    </div>
+    <div class="wg-card reveal">
+      <div class="wg-num">03</div>
+      <div class="wg-card-title">Free Illustrated Update</div>
+      <p class="wg-card-body">Purchase now and receive the illustrated edition automatically at no extra cost when it's complete. The mechanism doesn't change — the visuals are coming.</p>
+      <div class="wg-card-accent"></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- AUTHOR -->
+<section class="author-section">
+  <div class="author-block reveal">
+    <div class="author-initials">BE</div>
+  </div>
+  <div>
+    <h3 class="author-title reveal">Benjamin<br>Ethier</h3>
+    <div class="author-credential reveal">FRC-MS · Certified Coach · Author</div>
+    <p class="author-body reveal">
+      Over a decade of coaching experience working with clients whose bodies weren't responding to conventional approaches. The gap between what practitioners were offering and what the mechanism actually required kept showing up. This book is the explanation that was missing — the one that connects the physical restriction to the psychological result, and names what to do about it.
+    </p>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-inner">
+    <div class="final-price reveal" data-gumroad-field="price">$9.99</div>
+    <div class="final-price-label reveal">One-time purchase · Instant download</div>
+    <ul class="final-includes reveal">
+      <li>Full PDF — 102 pages</li>
+      <li>Illustrated edition included when complete</li>
+      <li>Works on any device</li>
+      <li>Secure checkout via Gumroad</li>
+    </ul>
+    <a href="https://benjethier.gumroad.com/l/uuyhrt" class="btn-buy-lg reveal">
+      Get Proprioceptive Poverty
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <div class="final-sub-note reveal">Instant delivery · 30-day guarantee · Satisfaction or refund</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    Proprioceptive Poverty · Benjamin Ethier · Sold via Gumroad
+    &nbsp;·&nbsp; <a href="https://gumroad.com/terms">Terms</a>
+    &nbsp;·&nbsp; <a href="https://gumroad.com/privacy">Privacy</a>
+  </p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 40);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
